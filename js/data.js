@@ -21,3 +21,10 @@ export const dataPesanan = [
     statusText: "Selesai & Pemasangan"
   }
 ];
+
+export const tarifLayanan = {
+  "Pagar & Kanopi Besi": 450000,
+  "Teralis & Railing Besi": 350000,
+  "Furnitur & Servis Las": 250000,
+  "Lainnya (Custom)": 300000
+};

@@ -1,3 +1,5 @@
+import { tarifLayanan } from './data.js';
+
 export const cariPesananByKode = (daftarPesanan, kodeTrx) => {
   if (!Array.isArray(daftarPesanan)) {
     throw new TypeError("Data pesanan harus berupa Array");
@@ -15,6 +17,28 @@ export const cariPesananByKode = (daftarPesanan, kodeTrx) => {
   }
 
   return hasil;
+};
+
+export const simpanRiwayatCek = (kodeTrx) => {
+  if (!kodeTrx) return;
+  const kodeClean = kodeTrx.trim().toUpperCase();
+  let riwayat = JSON.parse(localStorage.getItem('riwayat_cek_trx')) || [];
+  
+  if (!riwayat.includes(kodeClean)) {
+    riwayat.unshift(kodeClean);
+    if (riwayat.length > 5) riwayat.pop();
+    localStorage.setItem('riwayat_cek_trx', JSON.stringify(riwayat));
+  }
+};
+
+export const ambilRiwayatCek = () => {
+  return JSON.parse(localStorage.getItem('riwayat_cek_trx')) || [];
+};
+
+export const hitungEstimasiBiaya = (jenisLayanan, LuasSqm) => {
+  const hargaPerM2 = tarifLayanan[jenisLayanan] || 0;
+  const luas = parseFloat(LuasSqm) || 0;
+  return hargaPerM2 * luas;
 };
 
 export const buatPesanWhatsApp = (dataForm) => {
