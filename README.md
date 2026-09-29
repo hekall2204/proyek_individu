@@ -1,19 +1,10 @@
-# Rancang Bangun Sistem Informasi Pemesanan dan Monitoring Jasa Las Berbasis Web
-**Studi Kasus: 3 Putra - Jasa Las Pagar Besi (Kabupaten Nunukan)**
+# Dokumentasi Interaktivitas DOM, Event, & Web Storage (Tugas 5)
 
-Proyek ini berisi struktur halaman awal web pemesanan jasa las pembuatan pagar besi custom.
+## 1. Arsitektur State & Web Storage
+Aplikasi mengelola data non-sensitif menggunakan `localStorage` (Web Storage):
+- `riwayat_cek_trx` (`Array`): Menyimpan hingga 5 kode transaksi pencarian terakhir agar pengguna dapat melakukan pengecekan ulang secara instan.
 
-## Fitur & Struktur Halaman (`index.html`)
-- **Header & Navigasi**: Menu navigasi utama (`#beranda`, `#layanan`, `#portofolio`, `#pemesanan`, `#kontak`).
-- **Beranda**: Judul utama dan pengenalan singkat jasa las 3 Putra.
-- **Layanan**: Informasi pengerjaan pembuatan pagar besi custom.
-- **Portofolio**: Dokumentasi hasil pekerjaan pagar besi lengkap dengan atribut `alt`.
-- **Form Pemesanan**: Formulir input data pemesan (Nama, Nomor WhatsApp, Ukuran, dan Desain Pagar).
-- **Footer**: Informasi alamat bengkel di Jl. Tien Soeharto, Kab. Nunukan, dan kontak WhatsApp.
-
-## Checklist Aksesibilitas Dasar
-- Tangkapan atribut bahasa: `<html lang="id">`
-- Hirarki heading terurut (`h1` sampai `h3`)
-- Elemen gambar memiliki atribut `alt`
-- Kontrol form terhubung dengan elemen `<label>`
-- Navigasi ramah keyboard via tombol `Tab`
+## 2. Rincian Interaksi Bermakna
+1. **Kalkulator Estimasi Biaya Real-time (`input` & `change`):** Mengalkulasi estimasi biaya pesanan saat pengguna memilih jenis layanan dan menginput luas (m²).
+2. **Pengiriman Form Pemesanan (`submit`):** Mengolah input form dan hasil kalkulasi biaya menjadi format pesan langsung ke API WhatsApp.
+3. **Monitoring Status & Riwayat Search (`submit` & `click` Delegation):** Menampilkan timeline progress pesanan dan menyimpan riwayat pencarian dalam bentuk badge/chip interaktif menggunakan `localStorage`.
