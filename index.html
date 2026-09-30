@@ -109,36 +109,105 @@
         <p>Isi formulir berikut untuk mengajukan pemesanan dan berkonsultasi langsung via WhatsApp.</p>
       </div>
 
-      <form id="formPemesananWA" class="form-container">
+      <form id="formPemesananWA" class="form-container" novalidate aria-labelledby="formPemesananHeading">
+        <h3 id="formPemesananHeading" class="sr-only">Formulir Pemesanan Jasa</h3>
+        
+        <!-- Live region untuk mengumumkan ringkasan status submit ke screen reader -->
+        <div id="formSummaryAlert" class="sr-only" aria-live="assertive" role="alert"></div>
+
         <div class="form-group">
-          <label for="nama">Nama Lengkap</label>
-          <input type="text" id="nama" class="form-control" placeholder="Masukkan nama Anda" required>
+          <label for="nama">Nama Lengkap <span class="required-asterisk" aria-hidden="true">*</span></label>
+          <input 
+            type="text" 
+            id="nama" 
+            name="nama"
+            class="form-control" 
+            placeholder="Masukkan nama Anda" 
+            required 
+            minlength="3"
+            aria-required="true"
+            aria-describedby="namaHelp namaError"
+          >
+          <span id="namaHelp" class="form-help">Gunakan nama sesuai identitas.</span>
+          <span id="namaError" class="error-message" aria-live="polite"></span>
         </div>
 
         <div class="form-group">
-          <label for="whatsapp">Nomor WhatsApp</label>
-          <input type="tel" id="whatsapp" class="form-control" placeholder="Contoh: 08123456789" required>
+          <label for="whatsapp">Nomor WhatsApp <span class="required-asterisk" aria-hidden="true">*</span></label>
+          <input 
+            type="tel" 
+            id="whatsapp" 
+            name="whatsapp"
+            class="form-control" 
+            placeholder="Contoh: 08123456789 atau 628123456789" 
+            required
+            pattern="^(08|628|\+628)[0-9]{8,11}$"
+            aria-required="true"
+            aria-describedby="whatsappHelp whatsappError"
+          >
+          <span id="whatsappHelp" class="form-help">Format Indonesia diawali 08 atau 628 (10-14 digit).</span>
+          <span id="whatsappError" class="error-message" aria-live="polite"></span>
         </div>
 
         <div class="form-group">
-          <label for="jenis_layanan">Jenis Layanan</label>
-          <select id="jenis_layanan" class="form-control" required>
+          <label for="jenis_layanan">Jenis Layanan <span class="required-asterisk" aria-hidden="true">*</span></label>
+          <select 
+            id="jenis_layanan" 
+            name="jenis_layanan"
+            class="form-control" 
+            required
+            aria-required="true"
+            aria-describedby="layananHelp layananError"
+          >
             <option value="" disabled selected>-- Pilih Jenis Layanan --</option>
             <option value="Pagar & Kanopi Besi">Pagar &amp; Kanopi Besi</option>
-            <option value="Teralis & Railing Tangga">Teralis &amp; Railing Besi</option>
+            <option value="Teralis & Railing Besi">Teralis &amp; Railing Besi</option>
             <option value="Furnitur & Servis Las">Furnitur &amp; Servis Las</option>
             <option value="Lainnya (Custom)">Lainnya (Custom)</option>
           </select>
+          <span id="layananHelp" class="form-help">Pilih kategori utama pengerjaan.</span>
+          <span id="layananError" class="error-message" aria-live="polite"></span>
         </div>
 
         <div class="form-group">
-          <label for="ukuran">Ukuran / Dimensi Barang</label>
-          <input type="text" id="ukuran" class="form-control" placeholder="Contoh: Railing 4m x 1m / Pagar 3m x 1.5m" required>
+          <label for="ukuran">Estimasi Luas / Volume (m²) <span class="required-asterisk" aria-hidden="true">*</span></label>
+          <input 
+            type="number" 
+            id="ukuran" 
+            name="ukuran"
+            class="form-control" 
+            placeholder="Masukkan angka estimasi luas (contoh: 12)" 
+            required
+            min="1"
+            max="500"
+            step="0.1"
+            aria-required="true"
+            aria-describedby="ukuranHelp ukuranError"
+          >
+          <span id="ukuranHelp" class="form-help">Masukkan estimasi total luas area dalam meter persegi (m²).</span>
+          <span id="ukuranError" class="error-message" aria-live="polite"></span>
+        </div>
+
+        <!-- Dynamic Estimasi Display -->
+        <div class="form-group estimasi-box" aria-live="polite">
+          <label id="labelEstimasi">Estimasi Biaya Awal:</label>
+          <div id="estimasiDisplay" class="estimasi-value" aria-labelledby="labelEstimasi">Rp 0</div>
+          <small class="form-help">*Biaya final dikonfirmasi setelah survei lokasi langsung.</small>
         </div>
 
         <div class="form-group">
           <label for="catatan">Desain atau Catatan Pemesanan</label>
-          <textarea id="catatan" rows="4" class="form-control" placeholder="Jelaskan spesifikasi bahan, model, atau warna cat yang diinginkan"></textarea>
+          <textarea 
+            id="catatan" 
+            name="catatan"
+            rows="4" 
+            class="form-control" 
+            placeholder="Jelaskan spesifikasi bahan, model, atau warna cat yang diinginkan"
+            maxlength="500"
+            aria-describedby="catatanHelp catatanError"
+          ></textarea>
+          <span id="catatanHelp" class="form-help">Opsional. Maksimal 500 karakter.</span>
+          <span id="catatanError" class="error-message" aria-live="polite"></span>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Kirim via WhatsApp</button>
@@ -153,18 +222,29 @@
       </div>
 
       <div class="form-container">
-        <form id="formCekStatus">
+        <form id="formCekStatus" novalidate>
           <div class="form-group">
-            <label for="kode_trx">Kode Pemesanan / ID Transaksi</label>
+            <label for="kode_trx">Kode Pemesanan / ID Transaksi <span class="required-asterisk" aria-hidden="true">*</span></label>
             <div class="search-box">
-              <input type="text" id="kode_trx" class="form-control" placeholder="Contoh: TRX-7701" required>
+              <input 
+                type="text" 
+                id="kode_trx" 
+                class="form-control" 
+                placeholder="Contoh: TRX-7701" 
+                required
+                pattern="^TRX-[0-9]{4}$"
+                aria-required="true"
+                aria-describedby="kodeHelp kodeError"
+              >
               <button type="submit" class="btn btn-primary">Cek Status</button>
             </div>
+            <span id="kodeHelp" class="form-help">Format kode berupa TRX diikuti 4 digit angka (misal: TRX-7701).</span>
+            <span id="kodeError" class="error-message" aria-live="polite"></span>
           </div>
         </form>
 
         <!-- Dynamic Tracking Display -->
-        <div id="statusResult" class="status-result" style="display: none;">
+        <div id="statusResult" class="status-result" style="display: none;" aria-live="polite">
           <div class="status-info">
             <p><strong>Nama Pemesan:</strong> <span id="resNama">Pelanggan</span></p>
             <p><strong>Kode Transaksi:</strong> <span id="resKode">TRX-7701</span></p>
