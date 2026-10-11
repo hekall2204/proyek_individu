@@ -8,3 +8,4 @@ Aplikasi mengelola data non-sensitif menggunakan `localStorage` (Web Storage):
 1. **Kalkulator Estimasi Biaya Real-time (`input` & `change`):** Mengalkulasi estimasi biaya pesanan saat pengguna memilih jenis layanan dan menginput luas (m²).
 2. **Pengiriman Form Pemesanan (`submit`):** Mengolah input form dan hasil kalkulasi biaya menjadi format pesan langsung ke API WhatsApp.
 3. **Monitoring Status & Riwayat Search (`submit` & `click` Delegation):** Menampilkan timeline progress pesanan dan menyimpan riwayat pencarian dalam bentuk badge/chip interaktif menggunakan `localStorage`.
+

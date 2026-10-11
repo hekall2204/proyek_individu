@@ -22,6 +22,7 @@
         <li><a href="#portofolio">Portofolio</a></li>
         <li><a href="#pemesanan">Pemesanan</a></li>
         <li><a href="#monitoring">Monitoring</a></li>
+        <li><a href="#dashboard-api">Dashboard API</a></li>
         <li><a href="#kontak">Kontak</a></li>
       </ul>
     </nav>
@@ -96,7 +97,7 @@
           </div>
           <div class="card-body">
             <h3>Proyek Railing Besi</h3>
-            <p>Proses perakitan dan pengelasan rangka railing besi di area bengkel kerja sebelum tahap pengecatan akhir.</p>
+            <p>Proses perakitan dan pengelasan rangka railing besi dengan finishing cat tahan cuaca.</p>
           </div>
         </article>
       </div>
@@ -109,12 +110,9 @@
         <p>Isi formulir berikut untuk mengajukan pemesanan dan berkonsultasi langsung via WhatsApp.</p>
       </div>
 
-      <!-- Perbaikan aksesibilitas dan navigasi keyboard -->
-
       <form id="formPemesananWA" class="form-container" novalidate aria-labelledby="formPemesananHeading">
         <h3 id="formPemesananHeading" class="sr-only">Formulir Pemesanan Jasa</h3>
         
-        <!-- Live region untuk mengumumkan ringkasan status submit ke screen reader -->
         <div id="formSummaryAlert" class="sr-only" aria-live="assertive" role="alert"></div>
 
         <div class="form-group">
@@ -275,6 +273,30 @@
               <div class="step-label">Pemasangan</div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MINI DASHBOARD REST API SECTION -->
+    <section id="dashboard-api" class="section">
+      <div class="section-header">
+        <h2>Mini Dashboard &amp; Integrasi REST API</h2>
+        <p>Monitoring data material &amp; log operasional bengkel secara real-time dari server eksternal.</p>
+      </div>
+
+      <div class="dashboard-container" style="max-width: 1000px; margin: 0 auto;">
+        <!-- Kontrol Panel Dashboard -->
+        <div class="dashboard-controls" style="margin-bottom: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+          <button id="btnLoadPosts" class="btn btn-primary">Muat Log Aktivitas/Proyek</button>
+          <button id="btnLoadUsers" class="btn btn-secondary">Muat Data Rekanan/Vendor</button>
+        </div>
+
+        <!-- State Notification Container -->
+        <div id="apiStatusMessage"></div>
+
+        <!-- Data Display Grid -->
+        <div id="apiDataGrid" class="grid-container" style="margin-top: 20px;">
+          <!-- Konten hasil fetch akan dimasukkan secara dinamis di sini -->
         </div>
       </div>
     </section>

@@ -1,4 +1,6 @@
-import { dataPesanan } from './data.js';
+// js/main.js
+
+import { dataPesanan, tarifLayanan } from './data.js';
 import { 
   cariPesananByKode, 
   buatPesanWhatsApp,
@@ -8,17 +10,27 @@ import {
   validasiWhatsApp,
   validasiKodeTrx
 } from './layanan.js';
+import { fetchMaterialProjects } from './api.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- 1. INISIALISASI VARIABEL & ELEMEN DOM ---
   const formPemesanan = document.getElementById('formPemesananWA');
   const formMonitoring = document.getElementById('formCekStatus');
   const inputKode = document.getElementById('kode_trx');
   const jenisLayananSelect = document.getElementById('jenis_layanan');
   const ukuranInput = document.getElementById('ukuran');
+  const namaInput = document.getElementById('nama');
+  const waInput = document.getElementById('whatsapp');
+
+  // Mini Dashboard API Elements
+  const btnLoadPosts = document.getElementById('btnLoadPosts');
+  const btnLoadUsers = document.getElementById('btnLoadUsers');
+  const apiStatusMessage = document.getElementById('apiStatusMessage');
+  const apiDataGrid = document.getElementById('apiDataGrid');
 
   setupDynamicUI();
 
-  // Helper untuk menampilkan error secara aksesibel
+  // --- 2. HELPER ERROR HANDLING ---
   function showError(inputElement, errorElementId, message) {
     const errorContainer = document.getElementById(errorElementId);
     if (inputElement) {
@@ -31,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Helper untuk membersihkan error
   function clearError(inputElement, errorElementId) {
     const errorContainer = document.getElementById(errorElementId);
     if (inputElement) {
@@ -44,10 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Real-time Update Estimasi
+  // --- 3. REAL-TIME ESTIMASI BIAYA ---
   function updateEstimasi() {
-    const jenis = jenisLayananSelect.value;
-    const volume = ukuranInput.value;
+    const jenis = jenisLayananSelect ? jenisLayananSelect.value : '';
+    const volume = ukuranInput ? ukuranInput.value : '';
     const displayEstimasi = document.getElementById('estimasiDisplay');
     
     if (jenis && volume && !isNaN(volume) && parseFloat(volume) > 0) {
@@ -58,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Attach event listener real-time clearance & update
   if (jenisLayananSelect && ukuranInput) {
     jenisLayananSelect.addEventListener('change', () => {
       clearError(jenisLayananSelect, 'layananError');
@@ -71,12 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const namaInput = document.getElementById('nama');
   if (namaInput) {
     namaInput.addEventListener('input', () => clearError(namaInput, 'namaError'));
   }
 
-  const waInput = document.getElementById('whatsapp');
   if (waInput) {
     waInput.addEventListener('input', () => clearError(waInput, 'whatsappError'));
   }
@@ -85,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inputKode.addEventListener('input', () => clearError(inputKode, 'kodeError'));
   }
 
-  // Validasi Form Pemesanan
+  // --- 4. VALIDASI & SUBMIT FORM PEMESANAN ---
   if (formPemesanan) {
     formPemesanan.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -93,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let isFormValid = true;
       let firstInvalidInput = null;
 
-      // 1. Validasi Nama
+      // Validasi Nama
       const valNama = namaInput ? namaInput.value.trim() : '';
       if (!valNama) {
         showError(namaInput, 'namaError', 'Nama lengkap wajib diisi.');
@@ -107,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearError(namaInput, 'namaError');
       }
 
-      // 2. Validasi WhatsApp
+      // Validasi WhatsApp
       const valWA = waInput ? waInput.value.trim() : '';
       if (!valWA) {
         showError(waInput, 'whatsappError', 'Nomor WhatsApp wajib diisi.');
@@ -121,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearError(waInput, 'whatsappError');
       }
 
-      // 3. Validasi Jenis Layanan
+      // Validasi Jenis Layanan
       const valLayanan = jenisLayananSelect ? jenisLayananSelect.value : '';
       if (!valLayanan) {
         showError(jenisLayananSelect, 'layananError', 'Silakan pilih salah satu jenis layanan.');
@@ -131,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearError(jenisLayananSelect, 'layananError');
       }
 
-      // 4. Validasi Ukuran/Volume
+      // Validasi Ukuran/Volume
       const valUkuran = ukuranInput ? ukuranInput.value.trim() : '';
       if (!valUkuran) {
         showError(ukuranInput, 'ukuranError', 'Estimasi luas/volume wajib diisi.');
@@ -149,19 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
         clearError(ukuranInput, 'ukuranError');
       }
 
-      // Aksesibilitas: Fokus ke input pertama yang bermasalah jika ada error
       if (!isFormValid) {
-        if (firstInvalidInput) {
-          firstInvalidInput.focus();
-        }
+        if (firstInvalidInput) firstInvalidInput.focus();
         const summaryAlert = document.getElementById('formSummaryAlert');
-        if (summaryAlert) {
-          summaryAlert.textContent = "Pengiriman formulir gagal.";
-        }
+        if (summaryAlert) summaryAlert.textContent = "Pengiriman formulir gagal.";
         return;
       }
 
-      // Jika Semua Valid
       try {
         const totalEstimasi = hitungEstimasiBiaya(valLayanan, valUkuran);
         const formData = {
@@ -176,9 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlWA = buatPesanWhatsApp(formData);
         
         const summaryAlert = document.getElementById('formSummaryAlert');
-        if (summaryAlert) {
-          summaryAlert.textContent = "Formulir berhasil diproses. Membuka tautan WhatsApp...";
-        }
+        if (summaryAlert) summaryAlert.textContent = "Formulir berhasil diproses. Membuka tautan WhatsApp...";
 
         window.open(urlWA, '_blank');
       } catch (error) {
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Form Monitoring
+  // --- 5. FORM MONITORING & TRACKING STATUS ---
   if (formMonitoring) {
     renderRiwayatBadges();
 
@@ -285,5 +285,52 @@ document.addEventListener('DOMContentLoaded', () => {
       riwayatDiv.style.marginTop = '10px';
       formMonitoring.appendChild(riwayatDiv);
     }
+  }
+
+  // --- 6. MINI DASHBOARD REST API (DENGAN LIMIT 3 & BAHASA INDONESIA) ---
+  const logAktivitasIndo = [
+    { title: "Pengelasan Rangka Pagar Minimalis", body: "Proses pemotongan dan perakitan besi hollow galvanis tahan karat area Nunukan." },
+    { title: "Fabrikasi Kanopi Garasi Rumah", body: "Pemasangan rangka besi kokoh dan atap spandek lapis peredam suara." },
+    { title: "Pembuatan Teralis Jendela Modern", body: "Pengelasan presisi teralis motif minimalis untuk keamanan hunian pelanggan." }
+  ];
+
+  if (btnLoadPosts && btnLoadUsers) {
+    btnLoadPosts.addEventListener('click', async () => {
+      // Menggunakan _limit=3 agar pas 3 item
+      const posts = await fetchMaterialProjects('posts?_limit=3', apiDataGrid, apiStatusMessage);
+      
+      if (posts) {
+        apiDataGrid.innerHTML = posts.map((post, index) => {
+          const item = logAktivitasIndo[index] || { title: post.title, body: post.body };
+
+          return `
+            <article class="card">
+              <div class="card-body">
+                <span class="badge badge-warning">ID: TRX-API-${post.id}</span>
+                <h3>${item.title}</h3>
+                <p>${item.body}</p>
+              </div>
+            </article>
+          `;
+        }).join('');
+      }
+    });
+
+    btnLoadUsers.addEventListener('click', async () => {
+      const users = await fetchMaterialProjects('users?_limit=3', apiDataGrid, apiStatusMessage);
+      
+      if (users) {
+        apiDataGrid.innerHTML = users.map(user => `
+          <article class="card">
+            <div class="card-body">
+              <span class="badge badge-warning">Vendor / Mitra</span>
+              <h3>${user.name}</h3>
+              <p><strong>Email:</strong> ${user.email}</p>
+              <p><strong>Kota:</strong> ${user.address.city}</p>
+            </div>
+          </article>
+        `).join('');
+      }
+    });
   }
 });

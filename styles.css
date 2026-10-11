@@ -1,6 +1,3 @@
-/* ==========================================================================
-   1. CUSTOM PROPERTIES & RESET
-   ========================================================================== */
 :root {
   --primary-color: #0f172a;
   --secondary-color: #1e293b;
@@ -49,9 +46,6 @@ body {
   outline-offset: 3px;
 }
 
-/* ==========================================================================
-   2. REUSABLE COMPONENTS
-   ========================================================================== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -148,7 +142,9 @@ body {
 
 .card-body h3 {
   color: var(--heading-color);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 .form-group {
@@ -193,6 +189,7 @@ body {
   font-size: 0.85rem;
   font-weight: 600;
   border-radius: 4px;
+  width: fit-content;
 }
 
 .badge-warning {
@@ -200,9 +197,6 @@ body {
   color: #92400e;
 }
 
-/* ==========================================================================
-   3. BASE LAYOUT & SECTIONS (MOBILE FIRST DEFAULT)
-   ========================================================================== */
 .navbar {
   background-color: var(--primary-color);
   color: #ffffff;
@@ -317,7 +311,7 @@ body {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--spacing-lg);
 }
 
@@ -424,11 +418,6 @@ body {
   text-decoration: underline;
 }
 
-/* ==========================================================================
-   4. MEDIA QUERIES (PROGRESSIVE ENHANCEMENT)
-   ========================================================================== */
-
-/* Small Devices / Phones Horizontal (>= 480px) */
 @media (max-width: 480px) {
   .search-box {
     flex-direction: column;
@@ -442,10 +431,6 @@ body {
   
   .section-header h2 {
     font-size: 2rem;
-  }
-
-  .grid-container {
-    grid-template-columns: repeat(2, 1fr);
   }
 
   .tracking-timeline {
@@ -480,20 +465,11 @@ body {
     text-align: left;
   }
 
-  .grid-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .grid-portfolio {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* ==========================================================================
-   5. ACCESSIBILITY & FORM VALIDATION STYLES
-   ========================================================================== */
-
-/* Kelas Tersembunyi khusus Screen Reader */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -506,14 +482,12 @@ body {
   border: 0;
 }
 
-/* Tanda Wajib Isi */
 .required-asterisk {
   color: #dc2626;
   font-weight: bold;
   margin-left: 2px;
 }
 
-/* Teks Petunjuk Pembantu (Help Text) */
 .form-help {
   font-size: 0.825rem;
   color: #64748b;
@@ -521,7 +495,6 @@ body {
   display: block;
 }
 
-/* Kontainer & Pesan Error */
 .error-message {
   font-size: 0.85rem;
   color: #dc2626;
@@ -530,7 +503,6 @@ body {
   display: none;
 }
 
-/* State Visual Input Invalid */
 .form-control.is-invalid {
   border-color: #dc2626 !important;
   background-color: #fef2f2;
@@ -541,7 +513,6 @@ body {
   outline: 2px solid #dc2626;
 }
 
-/* Box Estimasi Biaya */
 .estimasi-box {
   background-color: #f0fdf4;
   border: 1px solid #bbf7d0;
