@@ -1,0 +1,17 @@
+{
+    "name": "asus/proyek_individu",
+    "autoload": {
+        "psr-4": {
+            "Asus\\ProyekIndividu\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "hekall2204",
+            "email": "hekall2204@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.7"
+    }
+}
