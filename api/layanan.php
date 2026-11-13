@@ -2,9 +2,16 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../Database.php';
+require_once __DIR__ . '/../Auth.php';
 
 header('Content-Type: application/json; charset=utf-8');
 $method = $_SERVER['REQUEST_METHOD'];
+
+if ($method === 'POST' || $method === 'PUT') {
+    Auth::requireRole(['admin', 'petugas']);
+} elseif ($method === 'DELETE') {
+    Auth::requireRole(['admin']);
+}
 
 try {
     // Menggunakan Singleton getInstance() sesuai struktur Database.php
