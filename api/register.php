@@ -14,7 +14,7 @@ $input    = json_decode(file_get_contents('php://input'), true) ?? $_POST;
 $nama     = trim($input['nama'] ?? '');
 $email    = trim($input['email'] ?? '');
 $password = $input['password'] ?? '';
-$role     = in_array($input['role'] ?? '', ['admin', 'petugas', 'pelanggan'], true) ? $input['role'] : 'pelanggan';
+$role     = 'pelanggan';
 
 if ($nama === '' || $email === '' || strlen($password) < 6) {
     http_response_code(400);
